@@ -1,0 +1,14 @@
+FROM --platfrom=${BUILDPLATFROM} mcr.microsoft.com/dotnet/sdk:7.0 AS build
+ARGS TARGETPLATFROM
+ARGS TARGETARCH
+ARGS BUILDPLATFROM
+WORKDIR /source
+COPY *.csproj .
+RUN dotnet restore -e $TARGETARCH
+COPY ..
+
+RUN dotnet publish -c release -o /app -a $TARGETARCH -- self-contained false --no-restore
+FROM build
+WORKDIR /app
+COPY build/app .
+ENTRYPOINT ["dotnet","worker.dll"]
