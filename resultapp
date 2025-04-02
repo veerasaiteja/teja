@@ -1,0 +1,9 @@
+FROM node-a8-slim
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/list/*
+WORKDIR /usr/local/app
+RUN npm install -g nodemon
+COPY package*.json .
+RUN npm install ci && mv /usr/local/app/node_modules
+ENV PORT 80
+EXPOSE 80
+CMD ["tini","--","node","server.js"]
