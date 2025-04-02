@@ -6,4 +6,5 @@ COPY package*.json .
 RUN npm install ci && mv /usr/local/app/node_modules
 ENV PORT 80
 EXPOSE 80
+
 CMD ["tini","--","node","server.js"]
